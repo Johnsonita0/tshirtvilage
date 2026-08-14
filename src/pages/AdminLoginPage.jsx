@@ -3,7 +3,7 @@ import { signInAdmin } from '../lib/supabaseClient';
 import '../css/pages/AdminLoginPage.css';
 
 function AdminLoginPage({ onLoginSuccess }) {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState('admin@tshirtvilage.com');
   const [password, setPassword] = useState('');
   const [status, setStatus] = useState('idle');
   const [error, setError] = useState('');
@@ -24,7 +24,7 @@ function AdminLoginPage({ onLoginSuccess }) {
 
       if (signInError) {
         setStatus('error');
-        setError(signInError.message || 'Failed to sign in. Please check your credentials.');
+        setError('Invalid credentials. Please try again.');
         return;
       }
 
@@ -39,7 +39,7 @@ function AdminLoginPage({ onLoginSuccess }) {
       }
     } catch (err) {
       setStatus('error');
-      setError(err.message || 'An error occurred during login.');
+      setError('An error occurred. Please try again later.');
     }
   };
 
@@ -92,9 +92,9 @@ function AdminLoginPage({ onLoginSuccess }) {
           </form>
 
           <div className="login-footer">
-            <p className="demo-info">
-              <strong>Demo Credentials:</strong><br />
-              Contact administrator for access
+            <p className="footer-text">
+              Authorized personnel only.<br />
+              For access assistance, contact your administrator.
             </p>
           </div>
         </div>
