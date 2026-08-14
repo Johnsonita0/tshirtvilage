@@ -7,7 +7,7 @@ function InternshipModal({ isOpen, onClose }) {
 
   const handleRegister = () => {
     onClose();
-    navigate('/internship-registration');
+    navigate('/register');
   };
 
   const handleBackdropClick = (e) => {
@@ -68,7 +68,7 @@ function InternshipModal({ isOpen, onClose }) {
 
           <div className="modal-footer">
             <button className="btn-primary-large" onClick={handleRegister}>
-              Apply Now →
+              Register Now →
             </button>
             <button className="btn-secondary-modal" onClick={onClose}>
               Maybe Later
