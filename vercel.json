@@ -2,10 +2,11 @@
   "buildCommand": "cd TshirtVilage && npm run build",
   "outputDirectory": "TshirtVilage/dist",
   "installCommand": "cd TshirtVilage && npm install",
-  "rewrites": [
+  "routes": [
     {
-      "source": "/:path*",
-      "destination": "/index.html"
+      "src": "^/(?!api).*",
+      "dest": "/index.html",
+      "status": 200
     }
   ]
 }
