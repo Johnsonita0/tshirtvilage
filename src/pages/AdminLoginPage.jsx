@@ -3,7 +3,7 @@ import { signInAdmin } from '../lib/supabaseClient';
 import '../css/pages/AdminLoginPage.css';
 
 function AdminLoginPage({ onLoginSuccess }) {
-  const [email, setEmail] = useState('admin@tshirtvilage.com');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [status, setStatus] = useState('idle');
   const [error, setError] = useState('');
@@ -48,9 +48,13 @@ function AdminLoginPage({ onLoginSuccess }) {
       <div className="login-container">
         <div className="login-card">
           <div className="login-header">
-            <img src="/logo/logo-tshirtvilage.svg" alt="T-Shirts Village" className="login-logo" />
-            <h1>Admin Portal</h1>
-            <p>T-Shirts Village Management Dashboard</p>
+            <div className="header-content">
+              <img src="/logo/logo1.jpeg" alt="T-Shirts Village" className="login-logo" />
+              <div className="header-text">
+                <h1>Management Portal</h1>
+                <p>Secure Admin Access</p>
+              </div>
+            </div>
           </div>
 
           <form className="login-form" onSubmit={handleSubmit}>
@@ -61,9 +65,10 @@ function AdminLoginPage({ onLoginSuccess }) {
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@tshirtvilage.com"
+                placeholder="Enter your email"
                 disabled={status === 'submitting'}
                 required
+                autoComplete="off"
               />
             </div>
 
@@ -74,9 +79,10 @@ function AdminLoginPage({ onLoginSuccess }) {
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
+                placeholder="Enter your password"
                 disabled={status === 'submitting'}
                 required
+                autoComplete="off"
               />
             </div>
 
