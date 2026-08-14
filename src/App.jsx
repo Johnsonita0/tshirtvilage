@@ -1,0 +1,102 @@
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import HomePage from './pages/HomePage';
+import AdminLoginPage from './pages/AdminLoginPage';
+import AdminDashboardPage from './pages/AdminDashboardPage';
+import EventRegistrationPage from './pages/EventRegistrationPage';
+import RegistrationPage from './pages/RegistrationPage';
+import InternshipRegistrationPage from './pages/InternshipRegistrationPage';
+import VerificationPage from './pages/VerificationPage';
+import VerificationStatusPage from './pages/VerificationStatusPage';
+import SuccessPage from './pages/SuccessPage';
+import MorePage from './pages/MorePage';
+import './css/App.css';
+
+function AppLoader() {
+  return (
+    <div className="app-loader-shell" aria-live="polite" aria-busy="true">
+      <div className="app-loader-card">
+        <div className="loader-brand-wrap">
+          <img src="/logo/logo1.jpeg" alt="T-Shirts Village" className="loader-brand-logo" />
+        </div>
+        <div className="skeleton-line skeleton-line-lg" />
+        <div className="skeleton-line skeleton-line-md" />
+        <div className="skeleton-line skeleton-line-sm" />
+        <div className="skeleton-grid">
+          <div className="skeleton-card" />
+          <div className="skeleton-card" />
+          <div className="skeleton-card" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  const [adminUser, setAdminUser] = useState(null);
+  const [adminLoading, setAdminLoading] = useState(true);
+
+  useEffect(() => {
+    const adminAuth = localStorage.getItem('adminAuth');
+    if (adminAuth) {
+      try {
+        const auth = JSON.parse(adminAuth);
+        if (auth.authenticated && auth.user) {
+          setAdminUser(auth.user);
+        }
+      } catch (e) {
+        localStorage.removeItem('adminAuth');
+      }
+    }
+    setAdminLoading(false);
+  }, []);
+
+  const handleAdminLoginSuccess = (user) => {
+    setAdminUser(user);
+  };
+
+  const handleAdminLogout = () => {
+    localStorage.removeItem('adminAuth');
+    setAdminUser(null);
+  };
+
+  if (adminLoading) {
+    return <AppLoader />;
+  }
+
+  return (
+    <Router>
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/" element={<HomePage />} />
+        <Route path="/register" element={<InternshipRegistrationPage />} />
+        <Route path="/event-register" element={<EventRegistrationPage />} />
+        <Route path="/verify" element={<VerificationPage />} />
+        <Route path="/verification-status" element={<VerificationStatusPage />} />
+        <Route path="/success" element={<SuccessPage />} />
+        <Route path="/more" element={<MorePage />} />
+
+        {/* Admin Routes */}
+        <Route
+          path="/admin"
+          element={adminUser ? <Navigate to="/admin/dashboard" /> : <AdminLoginPage onLoginSuccess={handleAdminLoginSuccess} />}
+        />
+        <Route
+          path="/admin/dashboard"
+          element={
+            adminUser ? (
+              <AdminDashboardPage user={adminUser} onLogout={handleAdminLogout} />
+            ) : (
+              <Navigate to="/admin" />
+            )
+          }
+        />
+
+        {/* Catch all */}
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    </Router>
+  );
+}
+
+export default App;
