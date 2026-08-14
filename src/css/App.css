@@ -93,6 +93,159 @@
   width: 100%;
 }
 
+.floating-actions {
+  position: fixed;
+  left: auto;
+  right: auto;
+  bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 14px;
+  pointer-events: none;
+  z-index: 1200;
+  width: calc(100% - 48px);
+  padding: 0 24px;
+}
+
+.floating-actions-single {
+  justify-content: space-between;
+}
+
+.floating-whatsapp-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+  order: 2;
+  gap: 8px;
+}
+
+.floating-scroll-top {
+  order: 1;
+  margin-right: auto;
+}
+
+.whatsapp-tip {
+  position: relative;
+  background: rgba(15, 23, 42, 0.94);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 8px 14px;
+  border-radius: 999px;
+  white-space: nowrap;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  animation: tipSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  order: 1;
+  bottom: auto;
+  right: auto;
+}
+
+.floating-whatsapp,
+.floating-scroll-top {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 999px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+  box-shadow: 0 16px 28px rgba(0, 0, 0, 0.18);
+}
+
+.floating-whatsapp {
+  width: 60px;
+  height: 60px;
+  padding: 12px;
+  background: linear-gradient(135deg, #25d366 0%, #1ebc5a 100%);
+  color: white;
+  border-radius: 999px;
+  animation: whatsappPulse 2.2s infinite ease-in-out;
+  flex-shrink: 0;
+  order: 2;
+}
+
+.floating-whatsapp svg {
+  width: 32px;
+  height: 32px;
+  fill: currentColor;
+}
+
+.floating-whatsapp:hover,
+.floating-scroll-top:hover {
+  transform: translateY(-2px);
+}
+
+.floating-scroll-top {
+  width: 48px;
+  height: 48px;
+  background: rgba(11, 29, 53, 0.9);
+  color: white;
+  font-size: 1.45rem;
+  cursor: pointer;
+  opacity: 1;
+  animation: fadeInUp 0.25s ease-out;
+}
+
+@keyframes whatsappPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.35);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(37, 211, 102, 0);
+  }
+}
+
+@keyframes tipSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes tipSlideOut {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+}
+
+@keyframes tipFade {
+  from {
+    opacity: 0;
+    transform: translateX(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .toast-container {
   position: fixed;
   left: 50%;
@@ -144,6 +297,45 @@
 @media (max-width: 768px) {
   .page-content {
     padding-top: 60px;
+  }
+
+  .floating-actions {
+    right: 16px;
+    bottom: 18px;
+    gap: 10px;
+  }
+
+  .whatsapp-tip {
+    font-size: 0.7rem;
+    padding: 7px 12px;
+  }
+
+  .floating-whatsapp {
+    width: 54px;
+    height: 54px;
+    padding: 10px;
+  }
+
+  .floating-whatsapp svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .floating-whatsapp {
+    width: 54px;
+    height: 54px;
+    padding: 10px;
+  }
+
+  .floating-whatsapp svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  .floating-scroll-top {
+    width: 42px;
+    height: 42px;
+    font-size: 1.2rem;
   }
 
   .toast-container {
