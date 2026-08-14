@@ -526,6 +526,21 @@
     padding: 14px;
   }
 
+  .filter-buttons {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .filter-btn {
+    flex: 1 1 calc(50% - 6px);
+    min-width: 0;
+    text-align: center;
+    padding: 8px 10px;
+    font-size: 0.72rem;
+    white-space: nowrap;
+  }
+
   .tab-navigation {
     padding: 0 12px;
     gap: 8px;
@@ -597,8 +612,9 @@
   }
 
   .filter-btn {
-    font-size: 0.82rem;
-    padding: 10px 12px;
+    font-size: 0.68rem;
+    padding: 8px 9px;
+    flex-basis: calc(50% - 6px);
   }
 
   .message-card {
