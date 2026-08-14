@@ -12,7 +12,9 @@
       "dest": "/assets/$1"
     }
   ],
-  "public": true
+  "public": true,
+  "protectionBypass": []
 }
+
 
 
