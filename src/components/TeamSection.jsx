@@ -5,22 +5,14 @@ function TeamSection() {
   const team = [
     {
       id: 0,
-      name: 'Hon Akan Eyo',
-      role: 'CEO',
+      name: 'Hon. Akan Eyo',
+      role: 'CEO & Founder',
       bio: 'Visionary leader driving T-Shirts Village towards innovation and excellence in the textile industry.',
       image: '/people/ceo.jpg',
       socials: { linkedin: '#', twitter: '#', instagram: '#' }
     },
     {
       id: 1,
-      name: 'Ufot Ekaete',
-      role: 'Founder & Director',
-      bio: 'With 8+ years of experience in textile production, leading T-Shirts Village to excellence.',
-      image: '/team/founder.jpg',
-      socials: { linkedin: '#', twitter: '#', instagram: '#' }
-    },
-    {
-      id: 2,
       name: 'Okon Udoimon',
       role: 'Production Manager',
       bio: 'Expert in quality control and production optimization. Ensures every piece meets our standards.',
@@ -28,7 +20,7 @@ function TeamSection() {
       socials: { linkedin: '#', twitter: '#', instagram: '#' }
     },
     {
-      id: 3,
+      id: 2,
       name: 'Abasi Kokor',
       role: 'Design Director',
       bio: 'Creative designer with passion for innovative custom apparel designs.',

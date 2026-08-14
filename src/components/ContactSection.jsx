@@ -12,7 +12,16 @@ function ContactSection() {
   });
 
   const [status, setStatus] = useState('idle');
-  const [message, setMessage] = useState('');
+
+  const showToast = (message, type = 'success') => {
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(
+        new CustomEvent('app:toast', {
+          detail: { message, type, duration: 4000 },
+        })
+      );
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,12 +34,10 @@ function ContactSection() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus('submitting');
-    setMessage('');
 
-    // Validation
     if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
       setStatus('error');
-      setMessage('Please fill in all required fields.');
+      showToast('Please fill in all required fields.', 'error');
       return;
     }
 
@@ -49,17 +56,12 @@ function ContactSection() {
       }
 
       setStatus('success');
-      setMessage('Thank you! We received your message and will get back to you soon.');
       setForm({ name: '', email: '', phone: '', subject: '', message: '' });
-      
-      // Auto-clear success message after 5 seconds
-      setTimeout(() => {
-        setStatus('idle');
-        setMessage('');
-      }, 5000);
+      showToast('Thank you! Your message has been sent successfully.', 'success');
+      setTimeout(() => setStatus('idle'), 2000);
     } catch (err) {
       setStatus('error');
-      setMessage('Failed to send message. Please try again.');
+      showToast('Failed to send message. Please try again.', 'error');
       console.error('Contact form error:', err);
     }
   };
@@ -172,12 +174,6 @@ function ContactSection() {
                 required
               />
             </div>
-
-            {message && (
-              <div className={`form-message ${status}`}>
-                {message}
-              </div>
-            )}
 
             <button type="submit" className="submit-btn" disabled={status === 'submitting'}>
               {status === 'submitting' ? 'Sending...' : 'Send Message'}

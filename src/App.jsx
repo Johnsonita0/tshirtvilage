@@ -36,8 +36,20 @@ function App() {
   const [adminUser, setAdminUser] = useState(null);
   const [adminLoading, setAdminLoading] = useState(true);
   const [showInternshipModal, setShowInternshipModal] = useState(true);
+  const [toasts, setToasts] = useState([]);
 
   useEffect(() => {
+    const handleToast = (event) => {
+      const { message = '', type = 'success', duration = 4000 } = event.detail || {};
+      const id = Date.now() + Math.random();
+      setToasts((current) => [...current, { id, message, type }]);
+      window.setTimeout(() => {
+        setToasts((current) => current.filter((toast) => toast.id !== id));
+      }, duration);
+    };
+
+    window.addEventListener('app:toast', handleToast);
+
     const adminAuth = localStorage.getItem('adminAuth');
     if (adminAuth) {
       try {
@@ -50,6 +62,10 @@ function App() {
       }
     }
     setAdminLoading(false);
+
+    return () => {
+      window.removeEventListener('app:toast', handleToast);
+    };
   }, []);
 
   const handleAdminLoginSuccess = (user) => {
@@ -96,6 +112,14 @@ function App() {
         {/* Catch all */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
+
+      <div className="toast-container" aria-live="polite" aria-atomic="true">
+        {toasts.map((toast) => (
+          <div key={toast.id} className={`toast toast-${toast.type}`}>
+            {toast.message}
+          </div>
+        ))}
+      </div>
     </Router>
   );
 }

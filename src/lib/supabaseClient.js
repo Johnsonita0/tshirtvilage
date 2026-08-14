@@ -332,6 +332,74 @@ export async function saveContactMessage(message) {
   }
 }
 
+export async function saveTestimonial(testimonial) {
+  if (missingSupabaseConfig || !supabase) {
+    return {
+      data: null,
+      error: new Error('Supabase is not configured. Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY.'),
+    };
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from('testimonials')
+      .insert(testimonial)
+      .select()
+      .single();
+
+    if (error) {
+      return { data: null, error };
+    }
+
+    return { data, error: null };
+  } catch (error) {
+    return {
+      data: null,
+      error: new Error('Unable to save testimonial. Please try again.'),
+    };
+  }
+}
+
+export async function getAllTestimonials() {
+  if (missingSupabaseConfig || !supabase) {
+    return { data: [], error: null };
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from('testimonials')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      return { data: [], error };
+    }
+
+    return { data: data || [], error: null };
+  } catch (error) {
+    return { data: [], error };
+  }
+}
+
+export async function updateTestimonialStatus(testimonialId, status) {
+  if (missingSupabaseConfig || !supabase) {
+    return { data: null, error: new Error('Supabase not configured') };
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from('testimonials')
+      .update({ status, updated_at: new Date().toISOString() })
+      .eq('id', testimonialId)
+      .select()
+      .single();
+
+    return { data, error };
+  } catch (error) {
+    return { data: null, error };
+  }
+}
+
 export async function getAllContactMessages() {
   if (missingSupabaseConfig || !supabase) {
     return { data: [], error: null };

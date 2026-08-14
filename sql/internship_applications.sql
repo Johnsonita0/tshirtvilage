@@ -30,6 +30,20 @@ CREATE INDEX IF NOT EXISTS internship_applications_email_idx
 CREATE INDEX IF NOT EXISTS internship_applications_status_idx
   ON public.internship_applications (status);
 
+CREATE TABLE IF NOT EXISTS public.testimonials (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  name text NOT NULL,
+  company text NOT NULL,
+  rating integer NOT NULL DEFAULT 5 CHECK (rating BETWEEN 1 AND 5),
+  message text NOT NULL,
+  status text NOT NULL DEFAULT 'new' CHECK (status IN ('new', 'approved', 'rejected')),
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS testimonials_status_idx
+  ON public.testimonials (status);
+
 -- If the table already exists and you're only adding missing columns:
 -- ALTER TABLE public.internship_applications
 --   ADD COLUMN IF NOT EXISTS reference_number text,

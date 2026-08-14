@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import '../css/components/ClientTestimonial.css';
+import { saveTestimonial } from '../lib/supabaseClient';
 
 function ClientTestimonial() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -63,19 +64,52 @@ function ClientTestimonial() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const showToast = (message, type = 'success') => {
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(
+        new CustomEvent('app:toast', {
+          detail: { message, type, duration: 4000 },
+        })
+      );
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (formData.name && formData.company && formData.message) {
-      const newTestimonial = {
-        id: testimonials.length + 1,
-        ...formData,
-        rating: parseInt(formData.rating),
-        image: formData.message.includes('great') ? '👩‍💼' : '👨‍💼'
+
+    if (!formData.name.trim() || !formData.company.trim() || !formData.message.trim()) {
+      showToast('Please complete all required testimonial fields.', 'error');
+      return;
+    }
+
+    try {
+      const payload = {
+        name: formData.name,
+        company: formData.company,
+        rating: Number(formData.rating),
+        message: formData.message,
+        status: 'new',
       };
-      setTestimonials([...testimonials, newTestimonial]);
+
+      const { data, error } = await saveTestimonial(payload);
+
+      if (error) {
+        throw error;
+      }
+
+      const newTestimonial = {
+        id: data?.id || testimonials.length + 1,
+        ...payload,
+        image: formData.message.toLowerCase().includes('great') ? '👩‍💼' : '👨‍💼'
+      };
+
+      setTestimonials((prev) => [...prev, newTestimonial]);
       setFormData({ name: '', company: '', rating: 5, message: '' });
       setShowForm(false);
-      alert('Thank you for your testimonial! 🎉');
+      showToast('Thank you! Your testimonial has been submitted successfully.', 'success');
+    } catch (error) {
+      console.error('Testimonial submission error:', error);
+      showToast('We could not submit your testimonial right now. Please try again.', 'error');
     }
   };
 

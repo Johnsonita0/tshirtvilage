@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabaseClient';
-import { getAllContactMessages, updateMessageStatus } from '../lib/supabaseClient';
+import { getAllContactMessages, updateMessageStatus, getAllTestimonials, updateTestimonialStatus } from '../lib/supabaseClient';
 import '../css/pages/AdminDashboardPage.css';
 
 function AdminDashboardPage({ user, onLogout }) {
   const [activeTab, setActiveTab] = useState('messages');
   const [messages, setMessages] = useState([]);
+  const [testimonials, setTestimonials] = useState([]);
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
@@ -20,6 +21,9 @@ function AdminDashboardPage({ user, onLogout }) {
     if (activeTab === 'messages') {
       const { data } = await getAllContactMessages();
       setMessages(data || []);
+    } else if (activeTab === 'testimonials') {
+      const { data } = await getAllTestimonials();
+      setTestimonials(data || []);
     } else {
       const { data, error } = await supabase
         .from('internship_applications')
@@ -35,6 +39,14 @@ function AdminDashboardPage({ user, onLogout }) {
   const handleStatusChange = async (messageId, newStatus) => {
     if (activeTab === 'messages') {
       await updateMessageStatus(messageId, newStatus);
+      setMessages((prev) =>
+        prev.map((msg) => (msg.id === messageId ? { ...msg, status: newStatus } : msg))
+      );
+    } else if (activeTab === 'testimonials') {
+      await updateTestimonialStatus(messageId, newStatus);
+      setTestimonials((prev) =>
+        prev.map((item) => (item.id === messageId ? { ...item, status: newStatus } : item))
+      );
     } else {
       const { error } = await supabase
         .from('internship_applications')
@@ -50,9 +62,11 @@ function AdminDashboardPage({ user, onLogout }) {
     }
   };
 
-  const filteredData = activeTab === 'messages' 
+  const filteredData = activeTab === 'messages'
     ? messages.filter((msg) => filter === 'all' || msg.status === filter)
-    : applications.filter((app) => filter === 'all' || app.status === filter);
+    : activeTab === 'testimonials'
+      ? testimonials.filter((item) => filter === 'all' || item.status === filter)
+      : applications.filter((app) => filter === 'all' || app.status === filter);
 
   const getStatusColor = (status) => {
     const colors = {
@@ -98,6 +112,16 @@ function AdminDashboardPage({ user, onLogout }) {
             📧 Contact Messages ({messages.length})
           </button>
           <button
+            className={`tab-btn ${activeTab === 'testimonials' ? 'active' : ''}`}
+            onClick={() => {
+              setActiveTab('testimonials');
+              setFilter('all');
+              setSelectedItem(null);
+            }}
+          >
+            ⭐ Testimonials ({testimonials.length})
+          </button>
+          <button
             className={`tab-btn ${activeTab === 'applications' ? 'active' : ''}`}
             onClick={() => {
               setActiveTab('applications');
@@ -112,7 +136,7 @@ function AdminDashboardPage({ user, onLogout }) {
         {/* Sidebar */}
         <div className="dashboard-sidebar">
           <div className="sidebar-section">
-            <h3>{activeTab === 'messages' ? 'Filter Messages' : 'Filter Applications'}</h3>
+            <h3>{activeTab === 'messages' ? 'Filter Messages' : activeTab === 'testimonials' ? 'Filter Testimonials' : 'Filter Applications'}</h3>
             <div className="filter-buttons">
               {activeTab === 'messages' ? (
                 <>
@@ -139,6 +163,33 @@ function AdminDashboardPage({ user, onLogout }) {
                     onClick={() => setFilter('replied')}
                   >
                     Replied ({messages.filter((m) => m.status === 'replied').length})
+                  </button>
+                </>
+              ) : activeTab === 'testimonials' ? (
+                <>
+                  <button
+                    className={`filter-btn ${filter === 'all' ? 'active' : ''}`}
+                    onClick={() => setFilter('all')}
+                  >
+                    All ({testimonials.length})
+                  </button>
+                  <button
+                    className={`filter-btn ${filter === 'new' ? 'active' : ''}`}
+                    onClick={() => setFilter('new')}
+                  >
+                    New ({testimonials.filter((item) => item.status === 'new').length})
+                  </button>
+                  <button
+                    className={`filter-btn ${filter === 'approved' ? 'active' : ''}`}
+                    onClick={() => setFilter('approved')}
+                  >
+                    Approved ({testimonials.filter((item) => item.status === 'approved').length})
+                  </button>
+                  <button
+                    className={`filter-btn ${filter === 'rejected' ? 'active' : ''}`}
+                    onClick={() => setFilter('rejected')}
+                  >
+                    Rejected ({testimonials.filter((item) => item.status === 'rejected').length})
                   </button>
                 </>
               ) : (
@@ -192,48 +243,69 @@ function AdminDashboardPage({ user, onLogout }) {
                     onClick={() => setSelectedItem(item)}
                   >
                     {activeTab === 'messages' ? (
-                      <>
-                        <div className="message-header">
-                          <div className="message-info">
-                            <h4>{item.name}</h4>
-                            <p className="message-email">{item.email}</p>
-                          </div>
-                          <span
-                            className="message-status"
-                            style={{ backgroundColor: getStatusColor(item.status) }}
-                          >
-                            {item.status}
-                          </span>
+                    <>
+                      <div className="message-header">
+                        <div className="message-info">
+                          <h4>{item.name}</h4>
+                          <p className="message-email">{item.email}</p>
                         </div>
-                        <p className="message-subject">{item.subject || 'No subject'}</p>
-                        <p className="message-preview">{item.message.substring(0, 100)}...</p>
-                        <p className="message-date">
-                          {new Date(item.created_at).toLocaleDateString()}{' '}
-                          {new Date(item.created_at).toLocaleTimeString()}
-                        </p>
-                      </>
-                    ) : (
-                      <>
-                        <div className="message-header">
-                          <div className="message-info">
-                            <h4>{item.first_name} {item.last_name}</h4>
-                            <p className="message-email">{item.email}</p>
-                          </div>
-                          <span
-                            className="message-status"
-                            style={{ backgroundColor: getStatusColor(item.status) }}
-                          >
-                            {item.status}
-                          </span>
+                        <span
+                          className="message-status"
+                          style={{ backgroundColor: getStatusColor(item.status) }}
+                        >
+                          {item.status}
+                        </span>
+                      </div>
+                      <p className="message-subject">{item.subject || 'No subject'}</p>
+                      <p className="message-preview">{item.message.substring(0, 100)}...</p>
+                      <p className="message-date">
+                        {new Date(item.created_at).toLocaleDateString()}{' '}
+                        {new Date(item.created_at).toLocaleTimeString()}
+                      </p>
+                    </>
+                  ) : activeTab === 'testimonials' ? (
+                    <>
+                      <div className="message-header">
+                        <div className="message-info">
+                          <h4>{item.name}</h4>
+                          <p className="message-email">{item.company}</p>
                         </div>
-                        <p className="message-subject">{item.reference_number}</p>
-                        <p className="message-preview">{item.institution}</p>
-                        <p className="message-date">
-                          {new Date(item.created_at).toLocaleDateString()}{' '}
-                          {new Date(item.created_at).toLocaleTimeString()}
-                        </p>
-                      </>
-                    )}
+                        <span
+                          className="message-status"
+                          style={{ backgroundColor: getStatusColor(item.status) }}
+                        >
+                          {item.status}
+                        </span>
+                      </div>
+                      <p className="message-subject">{Array(item.rating || 0).fill('⭐').join('')}</p>
+                      <p className="message-preview">{item.message.substring(0, 100)}...</p>
+                      <p className="message-date">
+                        {new Date(item.created_at).toLocaleDateString()}{' '}
+                        {new Date(item.created_at).toLocaleTimeString()}
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <div className="message-header">
+                        <div className="message-info">
+                          <h4>{item.first_name} {item.last_name}</h4>
+                          <p className="message-email">{item.email}</p>
+                        </div>
+                        <span
+                          className="message-status"
+                          style={{ backgroundColor: getStatusColor(item.status) }}
+                        >
+                          {item.status}
+                        </span>
+                      </div>
+                      <p className="message-subject">{item.reference_number}</p>
+                      <p className="message-preview">{item.institution}</p>
+                      <p className="message-date">
+                        {new Date(item.created_at).toLocaleDateString()}{' '}
+                        {new Date(item.created_at).toLocaleTimeString()}
+                      </p>
+                    </>
+                  )}
                   </div>
                 ))}
               </div>
@@ -242,6 +314,8 @@ function AdminDashboardPage({ user, onLogout }) {
               {selectedItem && (
                 activeTab === 'messages' ? (
                   <MessageDetail item={selectedItem} getStatusColor={getStatusColor} onStatusChange={handleStatusChange} />
+                ) : activeTab === 'testimonials' ? (
+                  <TestimonialDetail item={selectedItem} getStatusColor={getStatusColor} onStatusChange={handleStatusChange} />
                 ) : (
                   <ApplicationDetail item={selectedItem} getStatusColor={getStatusColor} onStatusChange={handleStatusChange} />
                 )
@@ -313,6 +387,53 @@ function MessageDetail({ item, getStatusColor, onStatusChange }) {
             Call
           </a>
         )}
+      </div>
+    </div>
+  );
+}
+
+// Testimonial Detail Component
+function TestimonialDetail({ item, onStatusChange }) {
+  return (
+    <div className="message-detail">
+      <div className="detail-header">
+        <h2>Testimonial Review</h2>
+        <button className="close-btn" onClick={() => window.location.reload()}>×</button>
+      </div>
+
+      <div className="detail-info">
+        <div className="info-row">
+          <strong>Name:</strong>
+          <span>{item.name}</span>
+        </div>
+        <div className="info-row">
+          <strong>Company:</strong>
+          <span>{item.company}</span>
+        </div>
+        <div className="info-row">
+          <strong>Rating:</strong>
+          <span>{Array(item.rating || 0).fill('⭐').join('')}</span>
+        </div>
+        <div className="info-row">
+          <strong>Date:</strong>
+          <span>{new Date(item.created_at).toLocaleString()}</span>
+        </div>
+        <div className="info-row">
+          <strong>Status:</strong>
+          <select
+            value={item.status}
+            onChange={(e) => onStatusChange(item.id, e.target.value)}
+          >
+            <option value="new">New</option>
+            <option value="approved">Approved</option>
+            <option value="rejected">Rejected</option>
+          </select>
+        </div>
+      </div>
+
+      <div className="detail-message">
+        <h3>Review</h3>
+        <p>{item.message}</p>
       </div>
     </div>
   );
