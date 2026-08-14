@@ -2,15 +2,8 @@
   "buildCommand": "cd TshirtVilage && npm run build",
   "outputDirectory": "TshirtVilage/dist",
   "installCommand": "cd TshirtVilage && npm install",
+  "cleanUrls": true,
   "rewrites": [
-    {
-      "source": "/admin(.*)",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/register(.*)",
-      "destination": "/index.html"
-    },
     {
       "source": "/(.*)",
       "destination": "/index.html"
