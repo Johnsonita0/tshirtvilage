@@ -35,6 +35,7 @@ function AppLoader() {
 function App() {
   const [adminUser, setAdminUser] = useState(null);
   const [adminLoading, setAdminLoading] = useState(true);
+  const [showInternshipModal, setShowInternshipModal] = useState(true);
 
   useEffect(() => {
     const adminAuth = localStorage.getItem('adminAuth');
