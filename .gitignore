@@ -9,3 +9,5 @@ coverage/
 *.log
 rhopee_slip_*.pdf
 rhopee_slip_*.png
+.vercel
+.env*

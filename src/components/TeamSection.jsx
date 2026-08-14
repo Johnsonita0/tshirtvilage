@@ -46,7 +46,7 @@ function TeamSection() {
         </div>
 
         <div className="team-grid">
-          {team.map((member) => (
+          {team.slice(0, 3).map((member) => (
             <div key={member.id} className="team-card">
               <div className="team-image-wrapper">
                 <img src={member.image} alt={member.name} className="team-image" />
