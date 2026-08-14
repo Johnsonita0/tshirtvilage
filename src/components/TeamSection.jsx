@@ -4,9 +4,17 @@ import '../css/components/TeamSection.css';
 function TeamSection() {
   const team = [
     {
+      id: 0,
+      name: 'Hon Akan Eyo',
+      role: 'CEO',
+      bio: 'Visionary leader driving T-Shirts Village towards innovation and excellence in the textile industry.',
+      image: '/people/ceo.jpg',
+      socials: { linkedin: '#', twitter: '#', instagram: '#' }
+    },
+    {
       id: 1,
       name: 'Ufot Ekaete',
-      role: 'Founder & CEO',
+      role: 'Founder & Director',
       bio: 'With 8+ years of experience in textile production, leading T-Shirts Village to excellence.',
       image: '/team/founder.jpg',
       socials: { linkedin: '#', twitter: '#', instagram: '#' }
@@ -46,7 +54,7 @@ function TeamSection() {
         </div>
 
         <div className="team-grid">
-          {team.slice(0, 3).map((member) => (
+          {team.slice(0, 4).map((member) => (
             <div key={member.id} className="team-card">
               <div className="team-image-wrapper">
                 <img src={member.image} alt={member.name} className="team-image" />
