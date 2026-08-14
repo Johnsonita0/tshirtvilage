@@ -1,25 +1,10 @@
 {
   "buildCommand": "cd TshirtVilage && npm run build",
   "outputDirectory": "TshirtVilage/dist",
-  "installCommand": "cd TshirtVilage && npm install --legacy-peer-deps",
+  "installCommand": "cd TshirtVilage && npm install",
   "routes": [
     {
-      "src": "^/assets/(.*)$",
-      "dest": "/assets/$1",
-      "headers": {
-        "cache-control": "max-age=31536000, immutable"
-      }
-    },
-    {
-      "src": "^/logo/(.*)$",
-      "dest": "/logo/$1"
-    },
-    {
-      "src": "^/index\\.html$",
-      "dest": "/index.html"
-    },
-    {
-      "src": "^/.*$",
+      "src": "/(.*)",
       "dest": "/index.html"
     }
   ]
