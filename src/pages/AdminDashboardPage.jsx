@@ -253,90 +253,96 @@ function AdminDashboardPage({ user, onLogout }) {
             <div className="messages-container">
               {/* List */}
               <div className="messages-list">
-                {filteredData.map((item) => (
-                  <div
-                    key={item.id}
-                    className={`message-card ${selectedItem?.id === item.id ? 'selected' : ''}`}
-                    onClick={() => setSelectedItem(item)}
-                  >
-                    {activeTab === 'messages' ? (
-                    <>
-                      <div className="message-header">
-                        <div className="message-info">
-                          <h4>{item.name}</h4>
-                          <p className="message-email">{item.email}</p>
-                        </div>
-                        <span
-                          className="message-status"
-                          style={{ backgroundColor: getStatusColor(item.status) }}
-                        >
-                          {item.status}
-                        </span>
-                      </div>
-                      <p className="message-subject">{item.subject || 'No subject'}</p>
-                      <p className="message-preview">{item.message.substring(0, 100)}...</p>
-                      <p className="message-date">
-                        {new Date(item.created_at).toLocaleDateString()}{' '}
-                        {new Date(item.created_at).toLocaleTimeString()}
-                      </p>
-                    </>
-                  ) : activeTab === 'testimonials' ? (
-                    <>
-                      <div className="message-header">
-                        <div className="message-info">
-                          <h4>{item.name}</h4>
-                          <p className="message-email">{item.company}</p>
-                        </div>
-                        <span
-                          className="message-status"
-                          style={{ backgroundColor: getStatusColor(item.status) }}
-                        >
-                          {item.status}
-                        </span>
-                      </div>
-                      <p className="message-subject">{Array(item.rating || 0).fill('⭐').join('')}</p>
-                      <p className="message-preview">{item.message.substring(0, 100)}...</p>
-                      <p className="message-date">
-                        {new Date(item.created_at).toLocaleDateString()}{' '}
-                        {new Date(item.created_at).toLocaleTimeString()}
-                      </p>
-                    </>
-                  ) : (
-                    <>
-                      <div className="message-header">
-                        <div className="message-info">
-                          <h4>{item.first_name} {item.last_name}</h4>
-                          <p className="message-email">{item.email}</p>
-                        </div>
-                        <span
-                          className="message-status"
-                          style={{ backgroundColor: getStatusColor(item.status) }}
-                        >
-                          {item.status}
-                        </span>
-                      </div>
-                      <p className="message-subject">{item.reference_number}</p>
-                      <p className="message-preview">{item.institution}</p>
-                      <p className="message-date">
-                        {new Date(item.created_at).toLocaleDateString()}{' '}
-                        {new Date(item.created_at).toLocaleTimeString()}
-                      </p>
-                    </>
-                  )}
-                  </div>
-                ))}
-              </div>
+                {filteredData.map((item) => {
+                  const isSelected = selectedItem?.id === item.id;
 
-              {/* Detail */}
-              {selectedItem && (
-                activeTab === 'messages' ? (
-                  <MessageDetail item={selectedItem} getStatusColor={getStatusColor} onStatusChange={handleStatusChange} />
-                ) : activeTab === 'testimonials' ? (
-                  <TestimonialDetail item={selectedItem} getStatusColor={getStatusColor} onStatusChange={handleStatusChange} />
-                ) : (
-                  <ApplicationDetail item={selectedItem} getStatusColor={getStatusColor} onStatusChange={handleStatusChange} />
-                )
-              )}
+                  return (
+                    <div key={item.id} className="list-item-group">
+                      <div
+                        className={`message-card ${isSelected ? 'selected' : ''}`}
+                        onClick={() => setSelectedItem(isSelected ? null : item)}
+                      >
+                        {activeTab === 'messages' ? (
+                          <>
+                            <div className="message-header">
+                              <div className="message-info">
+                                <h4>{item.name}</h4>
+                                <p className="message-email">{item.email}</p>
+                              </div>
+                              <span
+                                className="message-status"
+                                style={{ backgroundColor: getStatusColor(item.status) }}
+                              >
+                                {item.status}
+                              </span>
+                            </div>
+                            <p className="message-subject">{item.subject || 'No subject'}</p>
+                            <p className="message-preview">{item.message.substring(0, 100)}...</p>
+                            <p className="message-date">
+                              {new Date(item.created_at).toLocaleDateString()}{' '}
+                              {new Date(item.created_at).toLocaleTimeString()}
+                            </p>
+                          </>
+                        ) : activeTab === 'testimonials' ? (
+                          <>
+                            <div className="message-header">
+                              <div className="message-info">
+                                <h4>{item.name}</h4>
+                                <p className="message-email">{item.company}</p>
+                              </div>
+                              <span
+                                className="message-status"
+                                style={{ backgroundColor: getStatusColor(item.status) }}
+                              >
+                                {item.status}
+                              </span>
+                            </div>
+                            <p className="message-subject">{Array(item.rating || 0).fill('⭐').join('')}</p>
+                            <p className="message-preview">{item.message.substring(0, 100)}...</p>
+                            <p className="message-date">
+                              {new Date(item.created_at).toLocaleDateString()}{' '}
+                              {new Date(item.created_at).toLocaleTimeString()}
+                            </p>
+                          </>
+                        ) : (
+                          <>
+                            <div className="message-header">
+                              <div className="message-info">
+                                <h4>{item.first_name} {item.last_name}</h4>
+                                <p className="message-email">{item.email}</p>
+                              </div>
+                              <span
+                                className="message-status"
+                                style={{ backgroundColor: getStatusColor(item.status) }}
+                              >
+                                {item.status}
+                              </span>
+                            </div>
+                            <p className="message-subject">{item.reference_number}</p>
+                            <p className="message-preview">{item.institution}</p>
+                            <p className="message-date">
+                              {new Date(item.created_at).toLocaleDateString()}{' '}
+                              {new Date(item.created_at).toLocaleTimeString()}
+                            </p>
+                          </>
+                        )}
+                      </div>
+
+                      {isSelected && (
+                        <div className="selected-detail-panel">
+                          {activeTab === 'messages' ? (
+                            <MessageDetail item={item} getStatusColor={getStatusColor} onStatusChange={handleStatusChange} />
+                          ) : activeTab === 'testimonials' ? (
+                            <TestimonialDetail item={item} getStatusColor={getStatusColor} onStatusChange={handleStatusChange} />
+                          ) : (
+                            <ApplicationDetail item={item} getStatusColor={getStatusColor} onStatusChange={handleStatusChange} />
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           )}
         </div>

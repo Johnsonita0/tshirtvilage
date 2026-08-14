@@ -222,9 +222,12 @@
   overflow-x: auto;
 }
 
+.list-item-group {
+  border-bottom: 1px solid var(--border);
+}
+
 .message-card {
   padding: 15px;
-  border-bottom: 1px solid var(--border);
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -236,6 +239,11 @@
 .message-card.selected {
   background: var(--brand-soft);
   border-left: 4px solid var(--accent);
+}
+
+.selected-detail-panel {
+  padding: 0 15px 15px;
+  background: rgba(0, 58, 112, 0.02);
 }
 
 .message-header {
