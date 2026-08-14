@@ -3,6 +3,7 @@
   "outputDirectory": "TshirtVilage/dist",
   "installCommand": "cd TshirtVilage && npm install",
   "routes": [
+    { "handle": "filesystem" },
     {
       "src": "^/(?!api).*",
       "dest": "/index.html",
