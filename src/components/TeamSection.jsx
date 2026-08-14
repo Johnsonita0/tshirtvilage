@@ -10,30 +10,6 @@ function TeamSection() {
       bio: 'Visionary leader driving T-Shirts Village towards innovation and excellence in the textile industry.',
       image: '/people/ceo.jpg',
       socials: { linkedin: '#', twitter: '#', instagram: '#' }
-    },
-    {
-      id: 1,
-      name: 'Okon Udoimon',
-      role: 'Production Manager',
-      bio: 'Expert in quality control and production optimization. Ensures every piece meets our standards.',
-      image: '/team/production.jpg',
-      socials: { linkedin: '#', twitter: '#', instagram: '#' }
-    },
-    {
-      id: 2,
-      name: 'Abasi Kokor',
-      role: 'Design Director',
-      bio: 'Creative designer with passion for innovative custom apparel designs.',
-      image: '/team/designer.jpg',
-      socials: { linkedin: '#', twitter: '#', instagram: '#' }
-    },
-    {
-      id: 4,
-      name: 'Ito Udo',
-      role: 'Training Director',
-      bio: 'Leads our internship program with commitment to skill development and mentorship.',
-      image: '/team/trainer.jpg',
-      socials: { linkedin: '#', twitter: '#', instagram: '#' }
     }
   ];
 
@@ -45,8 +21,8 @@ function TeamSection() {
           <p>Expert professionals dedicated to delivering exceptional results</p>
         </div>
 
-        <div className="team-grid">
-          {team.slice(0, 4).map((member) => (
+        <div className="team-grid single-team-card">
+          {team.map((member) => (
             <div key={member.id} className="team-card">
               <div className="team-image-wrapper">
                 <img src={member.image} alt={member.name} className="team-image" />

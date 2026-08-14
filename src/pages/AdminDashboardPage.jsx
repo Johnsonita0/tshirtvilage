@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import { getAllContactMessages, updateMessageStatus, getAllTestimonials, updateTestimonialStatus } from '../lib/supabaseClient';
+import { sendInternshipEmail } from '../lib/emailClient';
 import '../css/pages/AdminDashboardPage.css';
 
 function AdminDashboardPage({ user, onLogout }) {
@@ -48,16 +49,31 @@ function AdminDashboardPage({ user, onLogout }) {
         prev.map((item) => (item.id === messageId ? { ...item, status: newStatus } : item))
       );
     } else {
+      const currentApp = applications.find((app) => app.id === messageId);
       const { error } = await supabase
         .from('internship_applications')
         .update({ status: newStatus })
         .eq('id', messageId);
+
       if (!error) {
         setApplications(
           applications.map((app) =>
             app.id === messageId ? { ...app, status: newStatus } : app
           )
         );
+
+        if (newStatus === 'approved' && currentApp?.email) {
+          try {
+            await sendInternshipEmail({
+              type: 'approval',
+              email: currentApp.email,
+              firstName: currentApp.first_name,
+              referenceNumber: currentApp.reference_number,
+            });
+          } catch (emailError) {
+            console.warn('Approval email not sent:', emailError.message || emailError);
+          }
+        }
       }
     }
   };

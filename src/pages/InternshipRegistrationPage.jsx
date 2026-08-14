@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
+import { sendInternshipEmail } from '../lib/emailClient';
 import '../css/pages/InternshipRegistrationPage.css';
 
 function InternshipRegistrationPage() {
@@ -157,6 +158,19 @@ function InternshipRegistrationPage() {
         .select();
 
       if (error) throw error;
+
+      try {
+        await sendInternshipEmail({
+          type: 'registration',
+          email: formData.email,
+          firstName: formData.firstName,
+          referenceNumber: refNumber,
+          institution: formData.institution,
+          courseField: formData.courseField,
+        });
+      } catch (emailError) {
+        console.warn('Registration email not sent:', emailError.message || emailError);
+      }
 
       setSuccessData({
         ...formData,

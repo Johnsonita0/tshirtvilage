@@ -11,6 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@sendgrid/mail": "^8.1.6",
     "@supabase/supabase-js": "^2.0.0",
     "lz-string": "^1.4.4",
     "puppeteer": "^25.4.0",
