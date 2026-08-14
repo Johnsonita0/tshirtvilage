@@ -2,18 +2,21 @@
   "buildCommand": "cd TshirtVilage && npm run build",
   "outputDirectory": "TshirtVilage/dist",
   "installCommand": "cd TshirtVilage && npm ci",
-  "routes": [
+  "headers": [
     {
-      "src": "/assets/(.*)",
-      "dest": "/assets/$1"
-    },
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=3600"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
     {
-      "src": "/logo/(.*)",
-      "dest": "/logo/$1"
-    },
-    {
-      "src": "/(.+)",
-      "dest": "/index.html"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
