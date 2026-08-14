@@ -4,28 +4,16 @@
   "installCommand": "cd TshirtVilage && npm install",
   "rewrites": [
     {
-      "source": "/admin",
+      "source": "/admin(.*)",
       "destination": "/index.html"
     },
     {
-      "source": "/admin/:path*",
+      "source": "/register(.*)",
       "destination": "/index.html"
     },
     {
-      "source": "/register",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/register/:path*",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/:path*",
+      "source": "/(.*)",
       "destination": "/index.html"
     }
-  ],
-  "env": {
-    "VITE_SUPABASE_URL": "@VITE_SUPABASE_URL",
-    "VITE_SUPABASE_ANON_KEY": "@VITE_SUPABASE_ANON_KEY"
-  }
+  ]
 }
