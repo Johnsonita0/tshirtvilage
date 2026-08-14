@@ -6,8 +6,6 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     emptyOutDir: true,
+    sourcemap: false,
   },
-  server: {
-    middlewareMode: false,
-  }
 })
