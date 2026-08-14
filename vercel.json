@@ -1,7 +1,21 @@
 {
   "buildCommand": "cd TshirtVilage && npm run build",
   "outputDirectory": "TshirtVilage/dist",
-  "installCommand": "cd TshirtVilage && npm ci"
+  "installCommand": "cd TshirtVilage && npm ci",
+  "routes": [
+    {
+      "src": "/assets/(.*)",
+      "dest": "/assets/$1"
+    },
+    {
+      "src": "/logo/(.*)",
+      "dest": "/logo/$1"
+    },
+    {
+      "src": "/(.+)",
+      "dest": "/index.html"
+    }
+  ]
 }
 
 
