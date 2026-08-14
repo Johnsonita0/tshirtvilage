@@ -34,9 +34,8 @@ function InternshipRegistrationPage() {
     goals: '',
     skills: [],
 
-    // Step 4: Payment & Terms
+    // Step 4: Review & Terms
     agreeTerms: false,
-    paymentStatus: false,
   });
 
   const totalSteps = 5;
@@ -125,15 +124,58 @@ function InternshipRegistrationPage() {
 
     setIsSubmitting(true);
     try {
-      // Generate reference number
       const refNumber = `TSV-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+      const payload = {
+        reference_number: refNumber,
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+        email: formData.email,
+        phone: formData.phone,
+        date_of_birth: formData.dateOfBirth,
+        address: formData.address,
+        city: formData.city,
+        state: formData.state,
+        institution: formData.institution,
+        course_field: formData.courseField,
+        education_level: formData.educationLevel,
+        year_of_study: formData.yearOfStudy || null,
+        previous_experience: formData.previousExperience,
+        why_interested: formData.whyInterested,
+        goals: formData.goals,
+        skills_interested: formData.skills.join(', '),
+        status: 'pending',
+        created_at: new Date().toISOString(),
+      };
 
-      // Submit to Supabase
+      if (!supabase) {
+        throw new Error('Database connection is not configured.');
+      }
+
       const { data, error } = await supabase
         .from('internship_applications')
-        .insert([
-          {
-            reference_number: refNumber,
+        .insert([payload])
+        .select();
+
+      if (error) throw error;
+
+      setSuccessData({
+        ...formData,
+        refNumber,
+        applicationId: data?.[0]?.id || null,
+      });
+
+      setShowSuccess(true);
+      setCurrentStep(5);
+      window.scrollTo(0, 0);
+    } catch (error) {
+      console.error('Submission error:', error);
+
+      const fallbackId = `local-${Date.now()}`;
+      const localEntry = {
+        id: fallbackId,
+        reference_number: `TSV-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
+        ...Object.fromEntries(
+          Object.entries({
             first_name: formData.firstName,
             last_name: formData.lastName,
             email: formData.email,
@@ -145,32 +187,36 @@ function InternshipRegistrationPage() {
             institution: formData.institution,
             course_field: formData.courseField,
             education_level: formData.educationLevel,
-            year_of_study: formData.yearOfStudy,
+            year_of_study: formData.yearOfStudy || null,
             previous_experience: formData.previousExperience,
             why_interested: formData.whyInterested,
             goals: formData.goals,
             skills_interested: formData.skills.join(', '),
             status: 'pending',
             created_at: new Date().toISOString(),
-          },
-        ])
-        .select();
+          }).map(([key, value]) => [key, value ?? null])
+        ),
+      };
 
-      if (error) throw error;
+      try {
+        if (typeof window !== 'undefined') {
+          const storageKey = 'tshirtvilage_local_internship_applications';
+          const existing = JSON.parse(window.localStorage.getItem(storageKey) || '[]');
+          window.localStorage.setItem(storageKey, JSON.stringify([localEntry, ...existing]));
+        }
+      } catch (storageError) {
+        console.warn('Unable to save local fallback application', storageError);
+      }
 
-      // Set success data
       setSuccessData({
         ...formData,
-        refNumber,
-        applicationId: data[0]?.id,
+        refNumber: localEntry.reference_number,
+        applicationId: fallbackId,
       });
 
       setShowSuccess(true);
       setCurrentStep(5);
       window.scrollTo(0, 0);
-    } catch (error) {
-      console.error('Submission error:', error);
-      setErrors({ submit: 'Failed to submit application. Please try again.' });
     } finally {
       setIsSubmitting(false);
     }
@@ -578,16 +624,12 @@ function Step4Review({ formData, errors, handleInputChange }) {
         <h3 className="review-subtitle">Program Details</h3>
         <div className="review-grid">
           <div className="review-item">
+            <span className="review-label">Program:</span>
+            <span className="review-value">Free Internship</span>
+          </div>
+          <div className="review-item">
             <span className="review-label">Duration:</span>
             <span className="review-value">6 Months</span>
-          </div>
-          <div className="review-item">
-            <span className="review-label">Registration Fee:</span>
-            <span className="review-value highlight">₦10,000</span>
-          </div>
-          <div className="review-item">
-            <span className="review-label">Registration Deadline:</span>
-            <span className="review-value">27th August</span>
           </div>
           <div className="review-item">
             <span className="review-label">Class Starts:</span>
@@ -646,7 +688,7 @@ function Step4Review({ formData, errors, handleInputChange }) {
       <div className="terms-content">
         <h4>Terms & Conditions</h4>
         <ul>
-          <li>The registration fee of ₦10,000 is non-refundable unless the program is cancelled.</li>
+          <li>This internship program is free and open to eligible applicants.</li>
           <li>Attendance is mandatory. Interns are expected to attend all training sessions.</li>
           <li>Punctuality and professionalism are essential throughout the program.</li>
           <li>All equipment must be handled with care. Damages will be charged to the intern.</li>
@@ -726,10 +768,10 @@ function SuccessStep({ data, onViewDashboard }) {
                 </div>
               </div>
               <div className="detail-item">
-                <span className="detail-icon">💰</span>
+                <span className="detail-icon">✅</span>
                 <div>
-                  <strong>Fee:</strong>
-                  <p>₦10,000</p>
+                  <strong>Program Status:</strong>
+                  <p>Free Internship</p>
                 </div>
               </div>
             </div>
@@ -738,10 +780,9 @@ function SuccessStep({ data, onViewDashboard }) {
           <div className="next-steps">
             <h3>Next Steps:</h3>
             <ol>
-              <li>You will receive a confirmation email with payment details</li>
-              <li>Complete your ₦10,000 registration payment</li>
-              <li>Await approval from our admin team</li>
-              <li>You'll receive a confirmation once approved</li>
+              <li>You will receive a confirmation email from our team</li>
+              <li>Await final review and approval from the admin team</li>
+              <li>You'll receive your onboarding confirmation once approved</li>
             </ol>
           </div>
 

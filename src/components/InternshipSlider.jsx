@@ -61,10 +61,10 @@ function InternshipSlider() {
               </div>
 
               <div className="detail-item">
-                <div className="detail-icon-sm">💳</div>
+                <div className="detail-icon-sm">🎯</div>
                 <div className="detail-info">
-                  <span className="detail-label">REGISTRATION FEE:</span>
-                  <span className="detail-value">₦10,000</span>
+                  <span className="detail-label">PROGRAM:</span>
+                  <span className="detail-value">FREE</span>
                 </div>
               </div>
             </div>
