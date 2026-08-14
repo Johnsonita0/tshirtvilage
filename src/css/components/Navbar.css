@@ -177,7 +177,8 @@
   }
 
   .logo-text {
-    display: none;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
   }
 
   .logo-img {

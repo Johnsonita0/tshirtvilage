@@ -222,12 +222,8 @@ function InternshipRegistrationPage() {
     }
   };
 
-  const handleViewDashboard = () => {
-    navigate('/admin/dashboard', { state: { newApplicationId: successData?.applicationId } });
-  };
-
   if (showSuccess && successData) {
-    return <SuccessStep data={successData} onViewDashboard={handleViewDashboard} />;
+    return <SuccessStep data={successData} />;
   }
 
   return (
@@ -701,7 +697,7 @@ function Step4Review({ formData, errors, handleInputChange }) {
 }
 
 // Step 5: Success
-function SuccessStep({ data, onViewDashboard }) {
+function SuccessStep({ data }) {
   return (
     <div className="success-container">
       <div className="success-wrapper">
@@ -795,9 +791,6 @@ function SuccessStep({ data, onViewDashboard }) {
         </div>
 
         <div className="success-actions">
-          <button className="btn-primary" onClick={onViewDashboard}>
-            View Application Status
-          </button>
         </div>
       </div>
     </div>
