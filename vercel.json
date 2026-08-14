@@ -4,7 +4,7 @@
   "installCommand": "cd TshirtVilage && npm install",
   "rewrites": [
     {
-      "source": "^/(?!.*\\.).*$",
+      "source": "/:path*",
       "destination": "/index.html"
     }
   ]
