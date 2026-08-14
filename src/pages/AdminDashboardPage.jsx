@@ -85,14 +85,15 @@ function AdminDashboardPage({ user, onLogout }) {
       <div className="dashboard-header">
         <div className="header-content">
           <div className="header-title">
-            <img src="/logo/logo1.jpeg" alt="Logo" className="header-logo" />
+            <a href="/" className="header-logo-link" aria-label="Go to home page">
+              <img src="/logo/logo1.jpeg" alt="Logo" className="header-logo" />
+            </a>
             <div className="header-copy">
               <h1>Welcome Admin</h1>
               <p>Manage messages, testimonials, and internship applications</p>
             </div>
           </div>
           <div className="header-actions">
-            <span className="user-info">{user?.email || 'Admin'}</span>
             <button className="logout-btn" onClick={onLogout}>Logout</button>
           </div>
         </div>

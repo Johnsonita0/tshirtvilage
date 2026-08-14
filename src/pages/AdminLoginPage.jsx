@@ -49,7 +49,9 @@ function AdminLoginPage({ onLoginSuccess }) {
         <div className="login-card">
           <div className="login-header">
             <div className="header-content">
-              <img src="/logo/logo1.jpeg" alt="T-Shirts Village" className="login-logo" />
+              <a href="/" className="login-logo-link" aria-label="Go to home page">
+                <img src="/logo/logo1.jpeg" alt="T-Shirts Village" className="login-logo" />
+              </a>
               <div className="header-text">
                 <h1>Management Portal</h1>
                 <p>Secure Admin Access</p>

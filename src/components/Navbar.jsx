@@ -33,10 +33,10 @@ function Navbar() {
     <nav className={`navbar ${scrolled ? 'navbar-scrolled' : ''}`}>
       <div className="navbar-container">
         {/* Logo */}
-        <div className="navbar-logo">
+        <a href="/" className="navbar-logo" aria-label="Go to home page">
           <img src="/logo/logo1.jpeg" alt="T-Shirts Village" className="logo-img" />
           <span className="logo-text">T-SHIRTS VILLAGE</span>
-        </div>
+        </a>
 
         {/* Menu Button */}
         <button className="nav-menu-btn" onClick={toggleMenu} aria-label="Toggle menu">

@@ -231,9 +231,9 @@ function InternshipRegistrationPage() {
       <div className="registration-wrapper">
         {/* Header */}
         <div className="registration-header">
-          <div className="header-logo">
+          <a href="/" className="header-logo" aria-label="Go to home page">
             <img src="/logo/logo1.jpeg" alt="T-Shirts Village" className="logo" />
-          </div>
+          </a>
           <h1 className="registration-title">FREE Internship Program Registration</h1>
           <p className="registration-subtitle">
             In Commemoration with our 8th Anniversary

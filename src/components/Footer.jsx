@@ -8,10 +8,10 @@ function Footer() {
     <footer className="app-footer-professional">
       <div className="footer-content">
         <div className="footer-section">
-          <div className="footer-logo">
+          <a href="/" className="footer-logo" aria-label="Go to home page">
             <img src="/logo/logo1.jpeg" alt="T-Shirts Village" className="logo-image" />
             <h3>T-Shirts Village</h3>
-          </div>
+          </a>
           <p className="footer-description">
             Premium custom apparel printing and manufacturing. Quality, creativity, and professionalism in every piece.
           </p>
